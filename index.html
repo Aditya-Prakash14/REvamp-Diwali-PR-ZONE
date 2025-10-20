@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali Card Code Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .editor-panel, .preview-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            background: #764ba2;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: #f8f9fa;
+        }
+
+        .preview-box {
+            border: 2px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            min-height: 500px;
+            background: white;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪔 Diwali Card Code Editor 🪔</h1>
+        
+        <div class="editor-container">
+            <div class="editor-panel">
+                <div class="panel-header">✍️ HTML Code Editor</div>
+                <textarea class="code-editor" id="htmlEditor" placeholder="Write your HTML code here...">
+<!-- Example: Create your Diwali card -->
+<div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #ffeaa7, #fdcb6e); border-radius: 15px;">
+    <h1 style="color: #d63031; font-size: 36px;">🪔 Happy Diwali! 🪔</h1>
+    <p style="color: #2d3436; font-size: 20px; margin: 20px 0;">
+        May this festival of lights bring joy, prosperity, and happiness to your life!
+    </p>
+    <div style="font-size: 50px; margin: 20px 0;">
+        ✨🎆🎇✨
+    </div>
+    <p style="color: #636e72; font-style: italic;">
+        - With love and best wishes
+    </p>
+</div>
+                </textarea>
+            </div>
+
+            <div class="preview-panel"></div>
+                <div class="panel-header">👁️ Live Preview</div>
+                <div class="preview-box" id="preview"></div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn" onclick="updatePreview()">🔄 Update Preview</button>
+            <button class="btn" onclick="clearEditor()">🗑️ Clear</button>
+            <button class="btn" onclick="downloadCard()">💾 Download</button>
+        </div>
+    </div>
+
+    <script>
+        const htmlEditor = document.getElementById('htmlEditor');
+        const preview = document.getElementById('preview');
+
+        // Auto-update preview on load
+        updatePreview();
+
+        // Auto-update on typing (with delay)
+        let typingTimer;
+        htmlEditor.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(updatePreview, 500);
+        });
+
+        function updatePreview() {
+            const code = htmlEditor.value;
+            preview.innerHTML = code;
+        }
+
+        function clearEditor() {
+            if (confirm('Are you sure you want to clear the editor?')) {
+                htmlEditor.value = '';
+                preview.innerHTML = '';
+            }
+        }
+
+        function downloadCard() {
+            const code = htmlEditor.value;
+            const blob = new Blob([`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Diwali Card</title>
+</head>
+<body>
+${code}
+</body>
+</html>`], { type: 'text/html' });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'diwali-card.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
